@@ -1,4 +1,4 @@
-use std::thread::{self, spawn};
+use std::thread;
 
 fn main() {
     let t1 = thread::spawn(func);
@@ -8,7 +8,7 @@ fn main() {
     t2.join().unwrap();
 
     let numbers = vec![1, 2, 3];
-    spawn(move || {
+    thread::spawn(move || {
         for n in &numbers {
             println!("{n}");
         }
