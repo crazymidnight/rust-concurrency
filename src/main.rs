@@ -25,14 +25,12 @@ fn main() {
     println!("average: {average}");
     thread::Builder::new().spawn(func).unwrap().join().unwrap();
 
-    let mut numbers = vec![1, 2, 3];
+    let numbers = vec![1, 2, 3];
     thread::scope(|s| {
         s.spawn(|| {
-            numbers.push(1);
             println!("length: {}", numbers.len());
         });
         s.spawn(|| {
-            numbers.push(2);
             for n in &numbers {
                 println!("{n}");
             }
