@@ -1,4 +1,7 @@
+use std::rc::Rc;
+use std::sync::Arc;
 use std::thread;
+use std::time::Duration;
 
 fn main() {
     let t1 = thread::spawn(func);
@@ -36,6 +39,34 @@ fn main() {
             }
         });
     });
+
+    static X: [i32; 3] = [1, 2, 3];
+    thread::spawn(|| dbg!(&X));
+    thread::spawn(|| dbg!(&X));
+
+    let x: &'static [i32; 3] = Box::leak(Box::new([1, 2, 3]));
+    thread::spawn(move || dbg!(x));
+    thread::spawn(move || dbg!(x));
+
+    let a = Rc::new([1, 2, 3]);
+    let b = a.clone();
+    assert_eq!(a.as_ptr(), b.as_ptr());
+
+    let a = Arc::new([1, 2, 3]);
+    let b = a.clone();
+    thread::spawn(move || dbg!(a));
+    thread::spawn(move || dbg!(b));
+
+    let a = Arc::new([1, 2, 3]);
+    thread::spawn({
+        let a = a.clone();
+        move || {
+            dbg!(a);
+        }
+    });
+    dbg!(a);
+
+    thread::sleep(Duration::from_secs(5));
 }
 
 fn func() {
