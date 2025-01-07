@@ -1,9 +1,10 @@
+use std::cell::Cell;
 use std::rc::Rc;
 use std::sync::Arc;
 use std::thread;
 use std::time::Duration;
 
-fn main() {
+fn   main() {
     let t1 = thread::spawn(func);
     let t2 = thread::spawn(func);
     println!("Hello fron the main thread");
@@ -66,6 +67,9 @@ fn main() {
     });
     dbg!(a);
 
+    let a = &Cell::new(42);
+    f_cell(a, a);
+
     thread::sleep(Duration::from_secs(5));
 }
 
@@ -73,4 +77,13 @@ fn func() {
     println!("Hello from another thread!");
     let id = thread::current().id();
     println!("This is my thread id: {id:?}");
+}
+
+fn f_cell(a: &Cell<i32>, b: &Cell<i32>) {
+    let before = a.get();
+    b.set(b.get() + 1);
+    let after = a.get();
+    if before != after {
+        println!("Hi");
+    }
 }
