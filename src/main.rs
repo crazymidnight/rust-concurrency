@@ -4,7 +4,7 @@ use std::sync::Arc;
 use std::thread;
 use std::time::Duration;
 
-fn   main() {
+fn main() {
     let t1 = thread::spawn(func);
     let t2 = thread::spawn(func);
     println!("Hello fron the main thread");
@@ -16,7 +16,9 @@ fn   main() {
         for n in &numbers {
             println!("{n}");
         }
-    }).join().unwrap();
+    })
+    .join()
+    .unwrap();
 
     let numbers = Vec::from_iter(0..=100);
     let t = thread::spawn(move || {
